@@ -1,0 +1,48 @@
+[gd_scene load_steps=5 format=3 uid="uid://pokemon"]
+
+[ext_resource type="Script" path="res://scripts/Pokemon.gd" id="1_2"]
+[ext_resource type="Theme" path="res://assets/themes/pixel_theme.tres" id="2_theme"]
+
+[ext_resource type="SpriteFrames" path="res://assets/pokemon_sprites/0001/sprite_frames.tres" id="3_frames"]
+[ext_resource type="Texture2D" path="res://assets/pokemon_sprites/poke.png" id="4_poke"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
+size = Vector2(35, 35)
+
+[node name="Pokemon" type="CharacterBody2D"]
+input_pickable = true
+script = ExtResource("1_2")
+
+[node name="PokeballSprite" type="Sprite2D" parent="."]
+texture = ExtResource("4_poke")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+visible = false
+sprite_frames = ExtResource("3_frames")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_1")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+
+[node name="AttackCooldown" type="Timer" parent="."]
+one_shot = true
+
+[node name="InfoBox" type="HBoxContainer" parent="."]
+visible = false
+offset_left = -50.0
+offset_top = -70.0
+offset_right = 50.0
+offset_bottom = -52.0
+theme = ExtResource("2_theme")
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="HealthBar" type="ProgressBar" parent="InfoBox"]
+modulate = Color(1, 0, 0, 1)
+custom_minimum_size = Vector2(45, 12)
+layout_mode = 2
+size_flags_vertical = 4
+max_value = 100.0
+value = 100.0
+show_percentage = false

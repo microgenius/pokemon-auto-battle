@@ -1,0 +1,27 @@
+{
+  "name": "pokemon-auto-battle-server",
+  "version": "1.0.0",
+  "description": "Game state, odds and betting server for Pokémon Auto Battle",
+  "main": "index.js",
+  "private": true,
+  "engines": {
+    "node": ">=22.5"
+  },
+  "scripts": {
+    "start": "node --disable-warning=ExperimentalWarning index.js",
+    "dev": "node --disable-warning=ExperimentalWarning --watch index.js",
+    "test": "node --disable-warning=ExperimentalWarning --test \"test/**/*.test.js\""
+  },
+  "keywords": [
+    "auto-battler",
+    "websocket",
+    "game-server"
+  ],
+  "author": "Sezer Tanrıverdi",
+  "license": "SEE LICENSE IN ../LICENSE",
+  "type": "commonjs",
+  "dependencies": {
+    "express": "^5.2.1",
+    "ws": "^8.21.1"
+  }
+}

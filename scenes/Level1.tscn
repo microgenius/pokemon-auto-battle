@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://level1"]
+
+[ext_resource type="Script" uid="uid://d2mti66jyuxwe" path="res://scripts/Level.gd" id="1_lvl"]
+[ext_resource type="Texture2D" path="res://assets/sprites/level1_bg_hd.jpg" id="2_bg"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_horiz"]
+size = Vector2(1280, 100)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vert"]
+size = Vector2(100, 720)
+
+[node name="Level1" type="Node2D" unique_id=1928990690]
+script = ExtResource("1_lvl")
+spawn_area = Rect2(250, 150, 780, 450)
+
+[node name="BackgroundLayer" type="CanvasLayer" parent="." unique_id=1406669631]
+layer = -1
+
+[node name="Background" type="TextureRect" parent="BackgroundLayer" unique_id=1406669632]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_bg")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Walls" type="Node2D" parent="." unique_id=725737023]
+
+[node name="TopWall" type="StaticBody2D" parent="Walls" unique_id=573186965]
+position = Vector2(640, 90)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/TopWall" unique_id=451002857]
+shape = SubResource("RectangleShape2D_horiz")
+
+[node name="BottomWall" type="StaticBody2D" parent="Walls" unique_id=848072232]
+position = Vector2(640, 650)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/BottomWall" unique_id=1897696026]
+shape = SubResource("RectangleShape2D_horiz")
+
+[node name="LeftWall" type="StaticBody2D" parent="Walls" unique_id=1347984229]
+position = Vector2(200, 360)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/LeftWall" unique_id=1469725767]
+shape = SubResource("RectangleShape2D_vert")
+
+[node name="RightWall" type="StaticBody2D" parent="Walls" unique_id=658087553]
+position = Vector2(1080, 360)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/RightWall" unique_id=1026770961]
+shape = SubResource("RectangleShape2D_vert")

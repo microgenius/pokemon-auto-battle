@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pokémon Auto Battle - Canlı Seyirci</title>
+    <style>
+        :root {
+            --bg-color: #0b0c10;
+            --panel-bg: #1f2833;
+            --accent-gold: #c5a059;
+            --text-light: #c5c6c7;
+            --accent-cyan: #66fcf1;
+            --accent-cyan-dark: #45a29e;
+            --win-color: #4CAF50;
+            --loss-color: #F44336;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-light);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 10px 20px;
+            box-sizing: border-box;
+            background: linear-gradient(180deg, rgba(31,40,51,1) 0%, rgba(11,12,16,0) 100%);
+        }
+
+        .header h1 {
+            color: var(--accent-gold);
+            margin: 0;
+            font-size: 28px;
+            text-shadow: 0 0 10px rgba(197, 160, 89, 0.5);
+        }
+
+        .user-points {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--accent-cyan);
+            background: rgba(31, 40, 51, 0.8);
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid var(--accent-cyan-dark);
+            box-shadow: 0 0 10px rgba(102, 252, 241, 0.2);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            padding: 0 20px 20px 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .screen {
+            display: none;
+            flex-direction: column;
+            flex: 1;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .screen.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        input {
+            padding: 15px;
+            font-size: 18px;
+            border-radius: 8px;
+            border: 2px solid var(--panel-bg);
+            background: var(--bg-color);
+            color: white;
+            margin-bottom: 20px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            border-color: var(--accent-cyan);
+        }
+
+        button {
+            padding: 15px;
+            font-size: 18px;
+            border-radius: 8px;
+            border: none;
+            background: linear-gradient(45deg, var(--accent-cyan-dark), var(--accent-cyan));
+            color: var(--bg-color);
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(102, 252, 241, 0.3);
+            transition: transform 0.1s, filter 0.2s;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+        
+        button:hover {
+            filter: brightness(1.1);
+        }
+
+        /* Lobby / Betting UI */
+        .betting-tabs {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .tab-btn {
+            background: var(--panel-bg);
+            color: var(--text-light);
+            border: 1px solid transparent;
+            padding: 10px 15px;
+            white-space: nowrap;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            box-shadow: none;
+        }
+
+        .tab-btn.active {
+            background: var(--accent-gold);
+            color: var(--bg-color);
+            font-weight: bold;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 15px;
+            overflow-y: auto;
+            max-height: 40vh;
+            padding-bottom: 20px;
+            align-content: start;
+        }
+
+        .pokemon-card {
+            background: var(--panel-bg);
+            border: 2px solid #333;
+            border-radius: 12px;
+            padding: 15px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .pokemon-card:hover {
+            background: #2a3644;
+        }
+        
+        .pokemon-card.selected {
+            border-color: var(--accent-gold);
+            background: #2c291e;
+            box-shadow: 0 0 15px rgba(197, 160, 89, 0.3);
+        }
+
+        .pokemon-sprite {
+            width: 80px;
+            height: 80px;
+            image-rendering: pixelated;
+        }
+
+        .pokemon-name {
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 5px;
+            text-align: center;
+        }
+        
+        .odds-badge {
+            background: var(--accent-gold);
+            color: var(--bg-color);
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
+        .wager-section {
+            background: var(--panel-bg);
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .wager-btn {
+            background: #444;
+            color: #fff;
+            border-radius: 5px;
+            padding: 5px 15px;
+            font-size: 18px;
+            cursor: pointer;
+            border: 1px solid #666;
+            min-width: 40px;
+            box-shadow: none;
+            transition: all 0.1s;
+        }
+        
+        .wager-btn:hover {
+            background: #555;
+            filter: none;
+        }
+
+        .summary-odds {
+            font-size: 16px;
+            color: var(--accent-gold);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Battle Screen */
+        .battle-info {
+            text-align: center;
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: var(--accent-cyan);
+            font-weight: bold;
+        }
+
+        .stats-table-wrapper {
+            background: var(--panel-bg);
+            border-radius: 12px;
+            padding: 10px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th, td {
+            text-align: center;
+            padding: 8px;
+            border-bottom: 1px solid #333;
+        }
+
+        th {
+            color: var(--accent-gold);
+        }
+
+        .hp-bar-bg {
+            width: 100%;
+            background: #333;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .hp-bar-fill {
+            height: 100%;
+            background: var(--win-color);
+            transition: width 0.3s;
+        }
+
+        .first-blood-banner {
+            position: absolute;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(244, 67, 54, 0.9);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 20px;
+            box-shadow: 0 4px 15px rgba(244, 67, 54, 0.5);
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s, transform 0.5s;
+        }
+
+        .first-blood-banner.show {
+            opacity: 1;
+            transform: translate(-50%, 20px);
+            animation: pulse 1s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from { box-shadow: 0 0 10px rgba(244, 67, 54, 0.5); }
+            to { box-shadow: 0 0 20px rgba(244, 67, 54, 0.9); }
+        }
+
+        .emotes-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .emote-btn {
+            background-color: var(--panel-bg);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            gap: 5px;
+            font-size: 14px;
+            color: var(--text-light);
+        }
+        .emote-btn img {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+            image-rendering: pixelated;
+        }
+
+        /* End Screen */
+        .winner-text {
+            font-size: 28px;
+            text-align: center;
+            color: var(--accent-gold);
+            margin-bottom: 20px;
+        }
+        
+        .results-card {
+            background: var(--panel-bg);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-height: 50vh;
+            overflow-y: auto;
+        }
+
+        .bet-result-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            border-left: 4px solid #333;
+        }
+
+        .bet-result-row.won { border-left-color: var(--win-color); }
+        .bet-result-row.lost { border-left-color: var(--loss-color); }
+
+        .bet-details {
+            display: flex;
+            flex-direction: column;
+        }
+        .bet-type { font-size: 12px; color: #aaa; }
+        .bet-choice { font-size: 16px; font-weight: bold; }
+        
+        .payout-summary {
+            text-align: center;
+            font-size: 22px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #333;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>POKEMON AUTO BATTLE</h1>
+        <div class="user-points" id="points-display">1000 CP</div>
+    </div>
+
+    <div id="fb-banner" class="first-blood-banner">🩸 İlk Kan: <span id="fb-name"></span>! 🩸</div>
+    <div id="fh-banner" class="first-blood-banner" style="top: 80px; color: #ffae42;">🎯 İlk Vuruş: <span id="fh-name"></span>! 🎯</div>
+
+    <div class="container">
+        
+        <!-- Login Screen -->
+        <div id="screen-login" class="screen active">
+            <h2 style="text-align: center; margin-top: 40px; margin-bottom: 40px;">Seyirci Olarak Katıl</h2>
+            <input type="text" id="username" placeholder="Kullanıcı Adı" maxlength="12">
+            <button onclick="joinGame()">Giriş Yap</button>
+        </div>
+
+        <!-- Waiting Screen -->
+        <div id="screen-waiting" class="screen">
+            <h2 id="waiting-title" style="text-align: center; margin-top: 100px;">Sıradaki Maç Bekleniyor...</h2>
+            <p id="waiting-desc" style="text-align: center; color: #aaa;">Host (Oyun Yöneticisi) henüz maçı başlatmadı.</p>
+        </div>
+
+        <!-- Lobby Screen -->
+        <div id="screen-lobby" class="screen">
+            <div class="betting-tabs" id="tabs-container">
+                <button class="tab-btn active" onclick="switchTab('winner')">🏆 Kazanan</button>
+                <button class="tab-btn" onclick="switchTab('first_blood')">🩸 İlk Kan</button>
+                <button class="tab-btn" onclick="switchTab('first_hit')">🎯 İlk Vuruş</button>
+                <button class="tab-btn" onclick="switchTab('kill_king')">💀 Kill Kralı</button>
+                <button class="tab-btn" onclick="switchTab('dodge_king')">🏃 Dodge Kralı</button>
+                <button class="tab-btn" onclick="switchTab('crit_king')">⚡ Kritik Kralı</button>
+                <button class="tab-btn" onclick="switchTab('incomplete_evolution')">🧬 Yarım Evrim</button>
+            </div>
+
+            <div id="options-container" class="options-grid"></div>
+
+            <div class="wager-section">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px;">
+                    <span style="font-size: 14px;">Mevcut Sekme Bahsi:</span>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <button class="wager-btn" onclick="adjustWager(-10)">-</button>
+                        <span id="current-wager-display" style="font-size:18px; font-weight:bold; color:var(--accent-gold);">10 CP</span>
+                        <button class="wager-btn" onclick="adjustWager(10)">+</button>
+                    </div>
+                </div>
+                <div class="summary-odds" style="font-size: 14px; color: #aaa;">
+                    <span>Aktif Bahis Sayısı:</span>
+                    <span id="total-bets-count">0</span>
+                </div>
+                <div class="summary-odds" style="font-size: 14px; color: #aaa;">
+                    <span>Toplam Tutar:</span>
+                    <span id="total-wager">0 CP</span>
+                </div>
+                <button id="btn-bet" onclick="submitBets()">Bahisleri Onayla</button>
+            </div>
+
+            <div class="wager-section" style="margin-top:10px;">
+                <span style="font-size:14px;">Oyuncular</span>
+                <div id="players-list" style="font-size:14px; color:#aaa;"></div>
+            </div>
+        </div>
+
+        <!-- Battle Screen -->
+        <div id="screen-battle" class="screen">
+            <div class="battle-info">Savaş Devam Ediyor</div>
+            
+            <div class="stats-table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Pokemon</th>
+                            <th>HP</th>
+                            <th>Lvl</th>
+                            <th>K/D/C</th>
+                        </tr>
+                    </thead>
+                    <tbody id="stats-body">
+                        <!-- JS populated -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="wager-section" style="margin-bottom:15px;">
+                <span id="heal-header" style="font-size:14px;">Şifa Gönder</span>
+                <div id="heal-list" style="display:flex; flex-direction:column; gap:8px;"></div>
+            </div>
+
+            <div class="emotes-grid">
+                <button class="emote-btn" onclick="sendEmote('hop')">
+                    <img id="emote-hop" src="" alt="Hop" onerror="this.src=''; this.alt='Hop'">
+                    <span>Zıpla</span>
+                </button>
+                <button class="emote-btn" onclick="sendEmote('attack')">
+                    <img id="emote-attack" src="" alt="Attack" onerror="this.src=''; this.alt='Saldır'">
+                    <span>Saldır</span>
+                </button>
+                <button class="emote-btn" onclick="sendEmote('pain')">
+                    <img id="emote-pain" src="" alt="Pain" onerror="this.src=''; this.alt='Acı'">
+                    <span>Acı Çek</span>
+                </button>
+                <button class="emote-btn" onclick="sendEmote('pose')">
+                    <img id="emote-pose" src="" alt="Pose" onerror="this.src=''; this.alt='Poz'">
+                    <span>Poz Ver</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- End Screen -->
+        <div id="screen-end" class="screen">
+            <div class="winner-text">Kazanan: <span id="winner-name">...</span>!</div>
+            <div id="results-container" class="results-card">
+                <!-- JS populated -->
+            </div>
+            <button onclick="backToWaiting()" style="margin-top: 20px;">Yeni Maç Bekle</button>
+        </div>
+    </div>
+
+    <script>
+        let ws;
+        let username = "";
+        let currentState = null;
+        let currentOdds = {};
+        
+        // Which round the picks below belong to, and whether they were sent.
+        // Both are what stop last round's slip leaking into the next one.
+        let currentRound = null;
+        let betsSubmitted = false;
+        let isReady = false;
+
+        // Labels only. Every price and every enable/disable decision comes from
+        // the server in HEAL_STATE, because the price depends on what the whole
+        // room has staked on that fighter — the page cannot work it out.
+        const healTiers = [
+            { id: 'small', label: 'Küçük' },
+            { id: 'large', label: 'Büyük' },
+        ];
+        let healState = null;
+        let healStateAt = 0;
+        let battlingSince = 0;
+
+        // HEAL_STATE only arrives with each LIVE_STATS tick, so the cooldown
+        // would sit still for three seconds at a time. Age it locally.
+        setInterval(() => {
+            if (!healState || !healState.cooldownLeftMs) return;
+            const left = healState.cooldownLeftMs - (Date.now() - healStateAt);
+            healState.cooldownLeftMs = Math.max(0, left);
+            healStateAt = Date.now();
+            if (currentState && currentState.status === 'BATTLING') renderHealOptions(lastLiveStats);
+        }, 1000);
+
+        let lastLiveStats = [];
+
+        let currentTab = 'winner';
+        let userSelections = {
+            winner: null, first_blood: null, first_hit: null, kill_king: null,
+            dodge_king: null, crit_king: null, incomplete_evolution: null
+        };
+        let userWagers = {
+            winner: 10, first_blood: 10, first_hit: 10, kill_king: 10,
+            dodge_king: 10, crit_king: 10, incomplete_evolution: 10
+        };
+
+        window.onload = () => {
+            // Anahtarlar eski proje adını taşıyor ama bilerek: değişirse herkesin
+            // cihaz token'ı kaybolur ve kendi kullanıcı adına geri giremez.
+            let saved = localStorage.getItem('pokebet_username');
+            if (saved) document.getElementById('username').value = saved;
+        };
+
+        function connectWebSocket() {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const host = window.location.host;
+            ws = new WebSocket(`${protocol}//${host}`);
+
+            ws.onopen = () => {
+                if (username) {
+                    ws.send(JSON.stringify({
+                        type: 'JOIN',
+                        username: username,
+                        deviceToken: localStorage.getItem('pokebet_device_token') || ''
+                    }));
+                }
+            };
+
+            ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                
+                if (data.type === 'IDENTITY') {
+                    // Proves ownership of this username on the next JOIN. The
+                    // server also returns the canonical spelling of the name —
+                    // adopt it, or a differently-cased login would compare
+                    // against the wrong key in the results screen.
+                    username = data.username;
+                    localStorage.setItem('pokebet_username', data.username);
+                    localStorage.setItem('pokebet_device_token', data.deviceToken);
+                }
+                else if (data.type === 'JOIN_REJECTED') {
+                    username = "";
+                    localStorage.removeItem('pokebet_username');
+                    showToast(data.reason || 'Bu kullanıcı adı kullanılamıyor.');
+                    showScreen('screen-login');
+                }
+                else if (data.type === 'USER_POINTS') {
+                    document.getElementById('points-display').innerText = data.points + " CP";
+                }
+                else if (data.type === 'STATE_UPDATE') {
+                    currentState = data.state;
+                    if (data.odds) currentOdds = data.odds;
+
+                    // A fresh round clears everything from the last one. This
+                    // used to key off the DOM, so last round's picks stayed
+                    // selected and the "bet accepted" screen locked people out
+                    // of the new lobby. RESTORE_BETS still arrives after this
+                    // on a reconnect, which is what re-applies a real open bet.
+                    if (currentState.round !== currentRound) {
+                        currentRound = currentState.round;
+                        battlingSince = 0;
+                        healState = null;
+                        betsSubmitted = false;
+                        isReady = false;
+                        resetSelections();
+                    }
+
+                    renderPlayers();
+                    updateUIBasedOnState();
+                }
+                else if (data.type === 'LIVE_STATS') {
+                    if (currentState && currentState.status === 'BATTLING') {
+                        lastLiveStats = data.stats;
+                        updateLiveStats(data.stats);
+                        renderHealOptions(data.stats);
+                    }
+                }
+                else if (data.type === 'HEAL') {
+                    // Healing is public: everyone sees who propped up whom.
+                    showToast(`${data.username} → ${nameForAlias(data.alias)} +${Math.round(data.amount)} HP`);
+                }
+                else if (data.type === 'HEAL_REJECTED') {
+                    showToast(data.reason || 'Şifa gönderilemedi.');
+                }
+                else if (data.type === 'HEAL_STATE') {
+                    healState = data;
+                    healStateAt = Date.now();
+                    renderHealOptions(lastLiveStats);
+                }
+                else if (data.type === 'FIRST_BLOOD') {
+                    showFirstBlood(data.killer_name || nameForAlias(data.killer));
+                }
+                else if (data.type === 'FIRST_HIT') {
+                    showFirstHit(data.attacker_name || nameForAlias(data.attacker));
+                }
+                else if (data.type === 'BET_RESULTS') {
+                    let myResult = data.results.users.find(u => u.username === username);
+                    if (myResult) {
+                        renderBetResults(myResult);
+                    }
+                }
+                else if (data.type === 'RESTORE_BETS') {
+                    if (data.bets && data.bets.bets) {
+                        betsSubmitted = true;
+                        data.bets.bets.forEach(b => {
+                            userSelections[b.type] = b.choice;
+                            userWagers[b.type] = b.wager || 10;
+                        });
+                        if (currentState && currentState.status === 'LOBBY') {
+                            renderLobbyOptions();
+                            updateWagerUI();
+                        }
+                    }
+                }
+                else if (data.type === 'EVOLUTION') {
+                    // Selections are aliases, so a pick follows its fighter
+                    // through evolution with nothing to rewrite. Only the label
+                    // and sprite on the card change.
+                    const opt = currentState && currentState.options
+                        ? currentState.options.find(o => o.alias === data.alias) : null;
+                    if (opt) {
+                        opt.name = data.new_name || opt.name;
+                        if (data.new_sprite_url) opt.sprite_url = data.new_sprite_url;
+                        if (currentState.status === 'LOBBY') renderLobbyOptions();
+                        updateEmotesFromState();
+                    }
+                }
+                else if (data.type === 'BETS_VOIDED') {
+                    // The match will never settle, so the slip is gone and the
+                    // stake is back. Clear the picks it was made of.
+                    resetSelections();
+                    isReady = false;
+                    betsSubmitted = false;
+                    showToast('Maç iptal edildi — bahisleriniz iade edildi.');
+                }
+                else if (data.type === 'BET_REJECTED') {
+                    // The server used to drop unaffordable or late slips silently,
+                    // so the page kept showing a bet that was never accepted.
+                    // Roll the optimistic flags back too, or the button keeps
+                    // claiming HAZIR ✓ over a slip the server never took.
+                    betsSubmitted = false;
+                    isReady = false;
+                    updateWagerUI();
+                    showToast(data.reason || 'Bahis kabul edilmedi.');
+                }
+            };
+            
+            ws.onclose = () => {
+                setTimeout(connectWebSocket, 3000);
+            };
+        }
+
+        let toastTimer = null;
+        function showToast(message) {
+            let toast = document.getElementById('toast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'toast';
+                toast.style.cssText = 'position:fixed;left:50%;bottom:32px;transform:translateX(-50%);' +
+                    'background:#2a1216;color:#ffd9d9;border:2px solid #b33;border-radius:8px;' +
+                    'padding:12px 20px;font-size:14px;z-index:9999;max-width:90vw;text-align:center;' +
+                    'box-shadow:0 4px 20px rgba(0,0,0,.5);transition:opacity .25s;';
+                document.body.appendChild(toast);
+            }
+            // textContent, not innerHTML — this string can carry a username.
+            toast.textContent = message;
+            toast.style.opacity = '1';
+
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => { toast.style.opacity = '0'; }, 4000);
+        }
+
+        // Aliases identify a fighter on the wire; this is the only place the
+        // page turns one back into something a human should read.
+        function nameForAlias(alias) {
+            if (!currentState || !currentState.options) return alias || '';
+            const opt = currentState.options.find(o => o.alias === alias);
+            return opt ? opt.name : (alias || '');
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        function joinGame() {
+            const input = document.getElementById('username');
+            if (input.value.trim().length > 0) {
+                username = input.value.trim();
+                localStorage.setItem('pokebet_username', username);
+                // connectWebSocket's onopen sends the JOIN, with the device
+                // token attached. This used to also poll for OPEN and send a
+                // second, tokenless JOIN, which the server now rejects.
+                connectWebSocket();
+
+                setWaiting("Sıradaki Maç Bekleniyor...", "Host henüz maçı başlatmadı.");
+                showScreen('screen-waiting');
+            }
+        }
+
+        function setWaiting(title, desc) {
+            document.getElementById('waiting-title').innerText = title;
+            document.getElementById('waiting-desc').innerText = desc;
+        }
+
+        function updateUIBasedOnState() {
+            if (!username) return;
+
+            if (currentState.status === 'WAITING') {
+                setWaiting("Sıradaki Maç Bekleniyor...", "Host henüz maçı başlatmadı.");
+                showScreen('screen-waiting');
+                resetSelections();
+            } 
+            else if (currentState.status === 'LOBBY') {
+                showScreen('screen-lobby');
+                renderLobbyOptions();
+                updateTotalOdds();
+            }
+            else if (currentState.status === 'BATTLING') {
+                if (!battlingSince) battlingSince = Date.now();
+                showScreen('screen-battle');
+                updateEmotesFromState();
+            }
+            else if (currentState.status === 'END') {
+                showScreen('screen-end');
+                document.getElementById('winner-name').innerText = nameForAlias(currentState.winner);
+            }
+        }
+
+        function renderPlayers() {
+            const list = document.getElementById('players-list');
+            list.replaceChildren();
+            const players = (currentState && currentState.players) || [];
+            for (const p of players) {
+                const row = el('div', null, (p.ready ? '✅ ' : '❌ ') + p.username);
+                row.style.padding = '2px 0';
+                list.appendChild(row);
+            }
+        }
+
+        function resetSelections() {
+            for (let k in userSelections) {
+                userSelections[k] = null;
+                userWagers[k] = 10;
+            }
+            currentTab = 'winner';
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector('.tab-btn').classList.add('active');
+            updateWagerUI();
+        }
+
+        function switchTab(tabId) {
+            currentTab = tabId;
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if(btn.innerText.toLowerCase().includes(getTabKeyword(tabId))) {
+                    btn.classList.add('active');
+                }
+            });
+            renderLobbyOptions();
+            updateWagerUI();
+        }
+
+        function getTabKeyword(tabId) {
+            const map = {
+                'winner': 'kazanan', 'first_blood': 'kan', 'first_hit': 'vuruş', 'kill_king': 'kill', 
+                'dodge_king': 'dodge', 'crit_king': 'kritik', 'incomplete_evolution': 'yarım evrim'
+            };
+            return map[tabId];
+        }
+
+        // Everything below arrives over the socket from the host, so none of it
+        // may reach innerHTML. These helpers build nodes instead: text goes in
+        // through textContent and URLs through an allowlist, which closes both
+        // the element and the attribute injection routes.
+        function el(tag, className, text) {
+            const node = document.createElement(tag);
+            if (className) node.className = className;
+            if (text !== undefined) node.textContent = String(text);
+            return node;
+        }
+
+        // Sprites are always same-origin paths the server itself serves; a host
+        // sending anything else gets no image rather than an arbitrary fetch.
+        function safeSpriteUrl(raw) {
+            const value = String(raw == null ? '' : raw);
+            return /^\/assets\/[A-Za-z0-9._\/-]+$/.test(value) && !value.includes('..')
+                ? value
+                : '';
+        }
+
+        function renderLobbyOptions() {
+            if (!currentState || !currentState.options) return;
+            const container = document.getElementById('options-container');
+            container.replaceChildren();
+
+            currentState.options.forEach(opt => {
+                // Selections and odds keys use the fighter's stable slot alias;
+                // the name is only ever drawn on the card. That is what keeps a
+                // pick attached to its fighter through an evolution.
+                const alias = String(opt.alias == null ? '' : opt.alias);
+                const name = String(opt.name == null ? '' : opt.name);
+                const oddsKey = currentTab + '_' + alias;
+
+                // A market the server left unpriced cannot be won — a species
+                // with nothing left to evolve into can never satisfy the
+                // incomplete-evolution bet. Offering it at a made-up price
+                // would just be taking people's points.
+                if (currentOdds[oddsKey] === undefined) return;
+
+                const card = el('div', 'pokemon-card');
+                if (userSelections[currentTab] === alias) {
+                    card.classList.add('selected');
+                }
+                card.onclick = () => selectOption(alias);
+
+                const odds = currentOdds[oddsKey];
+
+                const sprite = el('img', 'pokemon-sprite');
+                const src = safeSpriteUrl(opt.sprite_url);
+                if (src) sprite.src = src;
+
+                card.append(
+                    sprite,
+                    el('div', 'pokemon-name', name),
+                    el('div', 'odds-badge', odds.toFixed(2) + 'x')
+                );
+                container.appendChild(card);
+            });
+        }
+
+        function selectOption(alias) {
+            if (isReady) {
+                isReady = false;
+                ws.send(JSON.stringify({ type: 'READY', ready: false }));
+            }
+            if (userSelections[currentTab] === alias) {
+                userSelections[currentTab] = null;
+            } else {
+                userSelections[currentTab] = alias;
+            }
+            
+            let currentPoints = parseInt(document.getElementById('points-display').innerText) || 0;
+            let totalWager = 0;
+            for (let tab in userSelections) {
+                if (userSelections[tab]) {
+                    totalWager += userWagers[tab];
+                }
+            }
+            
+            if (totalWager > currentPoints && userSelections[currentTab]) {
+                let excess = totalWager - currentPoints;
+                userWagers[currentTab] -= excess;
+                if (userWagers[currentTab] < 10) {
+                    userSelections[currentTab] = null;
+                    userWagers[currentTab] = 10;
+                    alert("Yeterli puanınız kalmadı!");
+                }
+            }
+            
+            renderLobbyOptions();
+            updateWagerUI();
+        }
+
+        function adjustWager(amount) {
+            let current = userWagers[currentTab];
+            let next = Math.max(10, current + amount);
+            
+            if (userSelections[currentTab]) {
+                let currentPoints = parseInt(document.getElementById('points-display').innerText) || 0;
+                let totalWagerOtherTabs = 0;
+                for (let tab in userSelections) {
+                    if (tab !== currentTab && userSelections[tab]) {
+                        totalWagerOtherTabs += userWagers[tab];
+                    }
+                }
+                if (totalWagerOtherTabs + next > currentPoints) {
+                    next = currentPoints - totalWagerOtherTabs;
+                    if (next < 10) next = 10;
+                }
+            }
+            
+            userWagers[currentTab] = next;
+            updateWagerUI();
+        }
+
+        function updateWagerUI() {
+            document.getElementById('current-wager-display').innerText = userWagers[currentTab] + " CP";
+            
+            let count = 0;
+            let totalWager = 0;
+            for (let tab in userSelections) {
+                if (userSelections[tab]) {
+                    count++;
+                    totalWager += userWagers[tab];
+                }
+            }
+            
+            document.getElementById('total-bets-count').innerText = count;
+            document.getElementById('total-wager').innerText = totalWager + " CP";
+            const btn = document.getElementById('btn-bet');
+            btn.textContent = isReady
+                ? 'HAZIR ✓ — vazgeçmek için tıkla'
+                : (count > 0 ? 'Bahisleri Onayla ve Hazırım' : 'Bahissiz Hazırım');
+            btn.style.filter = isReady ? 'saturate(0.4)' : '';
+        }
+
+        function submitBets() {
+            // Second press hands readiness back rather than re-betting.
+            if (isReady) {
+                isReady = false;
+                ws.send(JSON.stringify({ type: 'READY', ready: false }));
+                updateWagerUI();
+                return;
+            }
+
+            let bets = [];
+            let totalWager = 0;
+            for (let tab in userSelections) {
+                if (userSelections[tab]) {
+                    bets.push({ type: tab, choice: userSelections[tab], wager: userWagers[tab] });
+                    totalWager += userWagers[tab];
+                }
+            }
+            
+            let currentPoints = parseInt(document.getElementById('points-display').innerText);
+            if (totalWager > currentPoints) {
+                alert("Yeterli CP'niz yok!");
+                return;
+            }
+
+            if (bets.length > 0) {
+                ws.send(JSON.stringify({ type: 'PLACE_BETS', bets: bets, wager: totalWager }));
+            }
+            ws.send(JSON.stringify({ type: 'READY', ready: true }));
+
+            isReady = true;
+            betsSubmitted = true;
+            showToast(bets.length > 0
+                ? 'Bahsiniz alındı — hazırsınız.'
+                : 'Bahissiz hazırsınız.');
+            updateWagerUI();
+        }
+
+        function updateLiveStats(stats) {
+            const tbody = document.getElementById('stats-body');
+            tbody.replaceChildren();
+
+            (Array.isArray(stats) ? stats : []).forEach(s => {
+                const hp = Number(s.hp) || 0;
+                const maxHp = Number(s.max_hp) || 0;
+                // Clamped and coerced before it reaches a style property, so a
+                // width can never carry anything but a number.
+                const hpPercent = maxHp > 0
+                    ? Math.max(0, Math.min(100, (hp / maxHp) * 100))
+                    : 0;
+
+                const row = document.createElement('tr');
+
+                const hpCell = document.createElement('td');
+                const bar = el('div', 'hp-bar-bg');
+                const fill = el('div', 'hp-bar-fill');
+                fill.style.width = hpPercent + '%';
+                bar.appendChild(fill);
+                const readout = el('span', null, Math.round(hp) + '/' + maxHp);
+                readout.style.fontSize = '10px';
+                hpCell.append(bar, readout);
+
+                row.append(
+                    el('td', null, s.name),
+                    hpCell,
+                    el('td', null, s.level),
+                    el('td', null, `${s.kills || 0}/${s.dodges || 0}/${s.criticals || 0}`)
+                );
+                tbody.appendChild(row);
+            });
+        }
+
+        function renderHealOptions(stats) {
+            const list = document.getElementById('heal-list');
+            list.replaceChildren();
+
+            const header = document.getElementById('heal-header');
+            if (!healState) {
+                const waited = battlingSince ? Date.now() - battlingSince : 0;
+                header.textContent = waited > 8000
+                    ? 'Şifa Gönder — fiyatlar gelmiyor (sunucuyu yeniden başlatın)'
+                    : 'Şifa Gönder — fiyatlar bekleniyor...';
+            } else if (healState.cooldownLeftMs > 0) {
+                header.textContent = `Şifa Gönder — ${Math.ceil(healState.cooldownLeftMs / 1000)} sn bekleyin`;
+            } else {
+                header.textContent = 'Şifa Gönder';
+            }
+
+            for (const s of (Array.isArray(stats) ? stats : [])) {
+                if (!s || !s.alias) continue;
+
+                const alive = Number(s.hp) > 0;
+                const perTier = healState && healState.fighters ? healState.fighters[s.alias] : null;
+                const anyAllowed = perTier && healTiers.some(t => perTier[t.id] && perTier[t.id].ok);
+
+                const block = el('div');
+                block.style.cssText = 'display:flex; flex-direction:column; gap:2px;';
+
+                const row = el('div');
+                row.style.cssText = 'display:flex; align-items:center; gap:8px;';
+
+                const icon = el('span', null, !alive ? '💀' : (anyAllowed ? '💚' : '⛔'));
+                icon.style.fontSize = '14px';
+                row.appendChild(icon);
+
+                const name = el('span', null, s.name);
+                name.style.cssText = 'flex:1 1 auto; min-width:0; font-size:14px; ' +
+                    'overflow:hidden; text-overflow:ellipsis; white-space:nowrap;';
+                if (!alive) name.style.opacity = '0.45';
+                row.appendChild(name);
+
+                // The price is always on the button, allowed or not — being told
+                // what something costs is most of why you were refused.
+                let blockedReason = '';
+                for (const tier of healTiers) {
+                    const info = perTier ? perTier[tier.id] : null;
+                    const btn = el('button', 'wager-btn',
+                        info ? `${tier.label} ${info.cost} CP` : `${tier.label} …`);
+                    // Fixed width and no wrapping: the label was clipping to
+                    // "Küçük…" and hiding the price, which is the one thing on it
+                    // that matters.
+                    btn.style.cssText = 'padding:6px 8px; font-size:12px; ' +
+                        'flex:0 0 auto; min-width:104px; white-space:nowrap;';
+
+                    const allowed = !!(info && info.ok);
+                    btn.disabled = !allowed;
+                    if (!allowed) {
+                        btn.style.opacity = '0.45';
+                        btn.style.cursor = 'not-allowed';
+                        if (info && info.reason && !blockedReason) blockedReason = info.reason;
+                    } else {
+                        btn.onclick = () => ws.send(JSON.stringify({
+                            type: 'HEAL_REQUEST', alias: s.alias, tier: tier.id
+                        }));
+                    }
+                    row.appendChild(btn);
+                }
+                block.appendChild(row);
+
+                // Spelled out on the row rather than hidden in a tooltip, which
+                // no touch device ever shows.
+                if (!anyAllowed) {
+                    const why = el('div', null,
+                        blockedReason || (healState ? '' : 'Fiyatlar bekleniyor...'));
+                    why.style.cssText = 'font-size:11px; color:#c98; padding-left:22px;';
+                    if (why.textContent) block.appendChild(why);
+                }
+                list.appendChild(block);
+            }
+        }
+
+        function showFirstBlood(name) {
+            const banner = document.getElementById('fb-banner');
+            document.getElementById('fb-name').innerText = name;
+            banner.classList.add('show');
+            setTimeout(() => {
+                banner.classList.remove('show');
+            }, 5000);
+        }
+
+        function showFirstHit(name) {
+            const banner = document.getElementById('fh-banner');
+            document.getElementById('fh-name').innerText = name;
+            banner.classList.add('show');
+            setTimeout(() => {
+                banner.classList.remove('show');
+            }, 5000);
+        }
+
+        function renderBetResults(myResult) {
+            const container = document.getElementById('results-container');
+            container.replaceChildren();
+
+            if (!myResult.bets || myResult.bets.length === 0) {
+                const empty = el('div', null, 'Bahis yapmadınız.');
+                empty.style.textAlign = 'center';
+                container.appendChild(empty);
+                return;
+            }
+
+            myResult.bets.forEach(b => {
+                const row = el('div', 'bet-result-row ' + (b.won ? 'won' : 'lost'));
+
+                const choice = el('span', 'bet-choice', 'Bahis: ' + String(b.choice == null ? '' : b.choice));
+                const actual = el('small', null, 'Gerçekleşen: ' + (b.actual || '-'));
+                actual.style.color = '#aaa';
+                choice.append(document.createElement('br'), actual);
+
+                const details = el('div', 'bet-details');
+                details.append(el('span', 'bet-type', b.type), choice);
+
+                const odds = el('span', null, (Number(b.odds) || 0).toFixed(2) + 'x');
+                odds.style.marginRight = '10px';
+                odds.style.color = 'var(--accent-gold)';
+
+                const outcome = el('div');
+                outcome.append(odds, el('span', null, b.won ? '✅' : '❌'));
+
+                row.append(details, outcome);
+                container.appendChild(row);
+            });
+
+            const diff = myResult.payout - myResult.wager;
+            const summary = el('div', 'payout-summary');
+
+            const headline = el('span', null,
+                diff > 0 ? `NET KAZANÇ: +${diff} CP`
+                : diff < 0 ? `NET KAYIP: ${diff} CP`
+                : 'BAŞABAŞ: 0 CP');
+            headline.style.color = diff > 0 ? 'var(--win-color)'
+                : diff < 0 ? 'var(--loss-color)'
+                : '#aaa';
+
+            const detail = el('span', null,
+                `Yatırılan: ${myResult.wager} CP | Toplam Getiri: ${myResult.payout} CP`);
+            detail.style.fontSize = '14px';
+            detail.style.color = '#aaa';
+
+            summary.append(headline, document.createElement('br'), detail);
+            container.appendChild(summary);
+        }
+
+        function backToWaiting() {
+            setWaiting("Sıradaki Maç Bekleniyor...", "Host henüz maçı başlatmadı.");
+            showScreen('screen-waiting');
+        }
+
+        function updateEmotesFromState() {
+            if (!currentState || !currentState.options) return;
+            let myWinnerBet = userSelections.winner;
+            if (!myWinnerBet) return;
+
+            const opt = currentState.options.find(o => o.alias === myWinnerBet);
+            if (opt && opt.sprite_url) {
+                const pid = opt.sprite_url.split('/').slice(-2, -1)[0];
+                updateEmotes(pid);
+            }
+        }
+
+        function updateEmotes(pid) {
+            if(!pid) return;
+            const baseUrl = "https://raw.githubusercontent.com/PMDCollab/SpriteCollab/master/portrait/" + pid;
+            document.getElementById('emote-hop').src = baseUrl + "/Happy.png";
+            document.getElementById('emote-attack').src = baseUrl + "/Angry.png";
+            document.getElementById('emote-pain').src = baseUrl + "/Pain.png";
+            document.getElementById('emote-pose').src = baseUrl + "/Normal.png";
+        }
+
+        function sendEmote(type) {
+            if (ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({ type: 'EMOTE', emoteType: type }));
+            }
+        }
+    </script>
+</body>
+</html>

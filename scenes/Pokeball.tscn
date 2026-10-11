@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://pokeball"]
+
+[ext_resource type="Script" path="res://scripts/Pokeball.gd" id="1_1"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_1"]
+size = Vector2(32, 32)
+
+[node name="Pokeball" type="Node2D"]
+script = ExtResource("1_1")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("PlaceholderTexture2D_1")
+
+[node name="IncubationTimer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="timeout" from="IncubationTimer" to="." method="_on_incubation_timer_timeout"]

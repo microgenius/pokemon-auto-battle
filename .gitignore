@@ -1,0 +1,51 @@
+# ---- Godot ----
+.godot/
+/android/
+*.translation
+
+# Exported builds — large binaries, publish via releases rather than git
+builds/
+
+# Pokémon artwork is not ours to redistribute. Fetched locally by
+# tools/setup.py — see README.
+assets/pokemon_sprites/
+
+# ---- Node ----
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# ---- Runtime / user data ----
+# Wallets and the device tokens that bind a username to a browser. Runtime
+# state, and the tokens are secrets — never commit these.
+server/*.db
+server/*.db-wal
+server/*.db-shm
+# Superseded by the database above; kept ignored so an old checkout stays clean.
+server/points.json
+server/identities.json
+server/*.migrated
+server/*.corrupt
+server/*.log
+
+# ---- Local config ----
+.env
+.env.local
+server/.env
+
+# ---- OS / editor ----
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+.idea/
+.vscode/
+
+# ---- Scratch ----
+scratch/
+tools/scratch/
+
+# ---- Local planning docs ----
+# Working notes for in-progress features; stale once the work lands, so kept
+# local rather than committed.
+plans/

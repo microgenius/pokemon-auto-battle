@@ -1,0 +1,228 @@
+[gd_scene format=3 uid="uid://mainmenu"]
+
+[ext_resource type="Script" uid="uid://cd8muciqf06y7" path="res://scripts/MainMenu.gd" id="1_mm"]
+
+[node name="MainMenu" type="Control" unique_id=1339908411]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_mm")
+
+[node name="Title" type="Label" parent="." unique_id=1705235112]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -192.0
+offset_top = 50.0
+offset_right = 192.0
+offset_bottom = 98.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 0.843137, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_outline_size = 8
+theme_override_font_sizes/font_size = 48
+text = "POKEMON AUTO BATTLE"
+horizontal_alignment = 1
+
+[node name="MapOption" type="OptionButton" parent="." unique_id=1978591588]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -250.0
+offset_top = -60.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1795832068]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -150.0
+offset_right = 150.0
+offset_bottom = -19.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="SettingsButton" type="Button" parent="VBoxContainer" unique_id=579569174]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "AYARLAR"
+
+[node name="StartButton" type="Button" parent="VBoxContainer" unique_id=637863303]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "OYUNA BAŞLA"
+
+[node name="SettingsPanel" type="Panel" parent="." unique_id=779097685]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -250.0
+offset_right = 400.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SettingsPanel" unique_id=379106615]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 15
+
+[node name="Title" type="Label" parent="SettingsPanel/VBoxContainer" unique_id=188376077]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "OYUN AYARLARI"
+horizontal_alignment = 1
+
+[node name="ResHBox" type="HBoxContainer" parent="SettingsPanel/VBoxContainer" unique_id=653874721]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SettingsPanel/VBoxContainer/ResHBox" unique_id=745208014]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "Çözünürlük:"
+
+[node name="OptionButton" type="OptionButton" parent="SettingsPanel/VBoxContainer/ResHBox" unique_id=1007032164]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DirHBox" type="HBoxContainer" parent="SettingsPanel/VBoxContainer" unique_id=1652665366]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SettingsPanel/VBoxContainer/DirHBox" unique_id=352308718]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "Yön Değiştirme (%):"
+
+[node name="HSlider" type="HSlider" parent="SettingsPanel/VBoxContainer/DirHBox" unique_id=1622758744]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+value = 40.0
+
+[node name="ValueLabel" type="Label" parent="SettingsPanel/VBoxContainer/DirHBox" unique_id=2014020479]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+text = "40"
+horizontal_alignment = 2
+
+[node name="AtkHBox" type="HBoxContainer" parent="SettingsPanel/VBoxContainer" unique_id=953245240]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SettingsPanel/VBoxContainer/AtkHBox" unique_id=1902898508]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "Ateş Etme (%):"
+
+[node name="HSlider" type="HSlider" parent="SettingsPanel/VBoxContainer/AtkHBox" unique_id=198172487]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+value = 85.0
+
+[node name="ValueLabel" type="Label" parent="SettingsPanel/VBoxContainer/AtkHBox" unique_id=254477211]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+text = "85"
+horizontal_alignment = 2
+
+[node name="HPMultHBox" type="HBoxContainer" parent="SettingsPanel/VBoxContainer" unique_id=219706380]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SettingsPanel/VBoxContainer/HPMultHBox" unique_id=2024119594]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "Arena HP Çarpanı (x):"
+
+[node name="HSlider" type="HSlider" parent="SettingsPanel/VBoxContainer/HPMultHBox" unique_id=1879214567]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = 1.0
+max_value = 10.0
+value = 3.0
+
+[node name="ValueLabel" type="Label" parent="SettingsPanel/VBoxContainer/HPMultHBox" unique_id=583423336]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+text = "3"
+horizontal_alignment = 2
+
+[node name="PredHBox" type="HBoxContainer" parent="SettingsPanel/VBoxContainer" unique_id=872680277]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SettingsPanel/VBoxContainer/PredHBox" unique_id=899979368]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "Öngörülü Nişan (%):"
+
+[node name="HSlider" type="HSlider" parent="SettingsPanel/VBoxContainer/PredHBox" unique_id=907682131]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+value = 40.0
+
+[node name="ValueLabel" type="Label" parent="SettingsPanel/VBoxContainer/PredHBox" unique_id=121131880]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+text = "40"
+horizontal_alignment = 2
+
+[node name="PerfHBox" type="HBoxContainer" parent="SettingsPanel/VBoxContainer" unique_id=652224404]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SettingsPanel/VBoxContainer/PerfHBox" unique_id=906433695]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "Kusursuz Atış (%):"
+
+[node name="HSlider" type="HSlider" parent="SettingsPanel/VBoxContainer/PerfHBox" unique_id=1608634222]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+value = 10.0
+
+[node name="ValueLabel" type="Label" parent="SettingsPanel/VBoxContainer/PerfHBox" unique_id=575441357]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+text = "10"
+horizontal_alignment = 2
+
+[node name="DevModeCheckBox" type="CheckBox" parent="SettingsPanel/VBoxContainer" unique_id=831614246]
+layout_mode = 2
+text = "Geliştirici Modu (Statları Göster)"
+
+[node name="CloseSettings" type="Button" parent="SettingsPanel/VBoxContainer" unique_id=171121857]
+layout_mode = 2
+size_flags_vertical = 10
+text = "KAPAT VE KAYDET"

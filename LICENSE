@@ -1,0 +1,113 @@
+Pokémon Auto Battle — License & Intellectual Property Notice
+============================================================
+
+READ THIS FIRST
+---------------
+
+Pokémon Auto Battle is an unofficial, non-commercial fan project made for fun among a small
+group of remote co-workers. It is not a product, it is not for sale, and it is
+not distributed as one.
+
+Pokémon Auto Battle is **not affiliated with, endorsed by, sponsored by, or approved by**
+Nintendo, Creatures Inc., GAME FREAK Inc., or The Pokémon Company.
+
+Pokémon and all related names, characters, artwork, sprites, audio, designs,
+type systems, species, and other elements are trademarks and copyrighted works
+of Nintendo, Creatures Inc., GAME FREAK Inc., and The Pokémon Company
+International, Inc. **All rights in that material remain exclusively with those
+rights holders.** Nothing in this repository claims any ownership over, or
+grants any right to, that material.
+
+If a rights holder objects to any part of this project, the intent is to comply.
+Open an issue or contact the repository owner and the material in question will
+be removed.
+
+
+1. Original source code
+-----------------------
+
+"Original source code" means the code written specifically for this project —
+the GDScript under `scripts/`, the scene files under `scenes/`, the Node.js
+server under `server/`, and the pipeline scripts under `tools/`. It does not
+include any third-party material listed in section 3.
+
+Copyright (c) 2026 Sezer Tanrıverdi
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction — including without limitation the rights to
+use, copy, modify, merge, publish, and distribute copies of the Software —
+subject to the following conditions:
+
+  a. NON-COMMERCIAL USE ONLY. The Software may not be sold, licensed for a fee,
+     used to provide a paid service, or otherwise exploited commercially. This
+     restriction exists both by the author's choice and because the bundled
+     assets (section 3) are themselves licensed for non-commercial use only.
+
+  b. The above copyright notice, this permission notice, and the intellectual
+     property notice at the top of this file must be included in all copies or
+     substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+2. On the word "betting"
+------------------------
+
+The in-game currency ("CP") has no monetary value. It cannot be purchased, sold,
+cashed out, transferred, or exchanged for anything of value. There is no real
+money, no cryptocurrency, and no prize of any kind at any point in this project.
+It is a scoreboard. Pokémon Auto Battle is not a gambling product and is not intended to be
+used as one.
+
+
+3. Third-party material
+-----------------------
+
+**Sprites and animations** (`assets/pokemon_sprites/`)
+  NOT distributed with this repository. `tools/setup.py` fetches them onto the
+  user's own machine from:
+
+  - Animation sheets: the PMDCollab SpriteCollab project,
+    https://github.com/PMDCollab/SpriteCollab
+    Licensed under Creative Commons Attribution-NonCommercial 4.0 International
+    (CC BY-NC 4.0): https://creativecommons.org/licenses/by-nc/4.0/
+    Created by the SpriteCollab community; see that repository's
+    `credit_names.txt` for individual artist attribution.
+  - Icons (`icon.png`) and the Poké Ball (`poke.png`): PokeAPI/sprites,
+    https://github.com/PokeAPI/sprites
+    Image contents are copyright The Pokémon Company.
+
+  Underlying character designs remain the property of the rights holders named
+  at the top of this file.
+
+**Species data** (`assets/pokemon_advanced_data.json`, `assets/pokemon_data.json`)
+  Retrieved via PokéAPI (https://pokeapi.co/). The underlying data describes
+  copyrighted works owned by the rights holders named at the top of this file.
+
+**Fonts** (`assets/fonts/`)
+  "Press Start 2P" by CodeMan38, licensed under the SIL Open Font License 1.1.
+
+**Godot Engine**
+  https://godotengine.org/ — MIT License.
+
+**`addons/godot_ai/`**
+  Third-party editor addon; see `godot-ai-LICENSE.txt` for its terms.
+
+**Server dependencies**
+  `express` (MIT) and `ws` (MIT); see `server/package.json`.
+
+Where the terms above conflict with section 1, the third-party terms govern that
+third-party material.
+
+
+4. Not legal advice
+-------------------
+
+This file is a good-faith statement of intent by a hobbyist, not a legal opinion.
+It does not create rights that the underlying rights holders have not granted.

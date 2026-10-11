@@ -1,0 +1,210 @@
+[gd_scene format=3 uid="uid://main"]
+
+[ext_resource type="Script" path="res://scripts/GameManager.gd" id="1_2n7xk"]
+[ext_resource type="Theme" path="res://assets/themes/pixel_theme.tres" id="2_theme"]
+[ext_resource type="Script" path="res://scripts/ui/Scoreboard.gd" id="3_scoreboard"]
+
+[node name="Main" type="Node2D"]
+
+[node name="TileMapLayer" type="TileMapLayer" parent="."]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(640, 360)
+zoom = Vector2(1, 1)
+
+[node name="Entities" type="Node2D" parent="."]
+unique_name_in_owner = true
+process_mode = 1
+
+[node name="UI" type="CanvasLayer" parent="."]
+unique_name_in_owner = true
+process_mode = 3
+[node name="PauseLabel" type="Label" parent="UI"]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -200.0
+offset_top = 20.0
+offset_right = 200.0
+offset_bottom = 60.0
+grow_horizontal = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(1, 0.8, 0, 1)
+theme_override_font_sizes/font_size = 32
+text = "UFAK BİR MOLA"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ToggleScoreButton" type="Button" parent="UI"]
+unique_name_in_owner = true
+visible = false
+theme = ExtResource("2_theme")
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -190.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = 50.0
+grow_horizontal = 0
+text = "Skor Gizle"
+theme_override_font_sizes/font_size = 10
+
+[node name="ScoreboardPanel" type="PanelContainer" parent="UI"]
+unique_name_in_owner = true
+visible = false
+theme = ExtResource("2_theme")
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -190.0
+offset_top = 60.0
+offset_right = -20.0
+offset_bottom = 150.0
+grow_horizontal = 0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="UI/ScoreboardPanel"]
+layout_mode = 2
+custom_minimum_size = Vector2(150, 250)
+horizontal_scroll_mode = 0
+
+[node name="Scoreboard" type="VBoxContainer" parent="UI/ScoreboardPanel/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+script = ExtResource("3_scoreboard")
+
+[node name="CountdownLabel" type="Label" parent="UI"]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 128
+text = "3"
+horizontal_alignment = 1
+vertical_alignment = 1
+pivot_offset = Vector2(640, 360)
+
+[node name="ResetButton" type="Button" parent="UI"]
+unique_name_in_owner = true
+process_mode = 3
+theme = ExtResource("2_theme")
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 120.0
+offset_bottom = 60.0
+text = "YENİDEN BAŞLAT"
+
+[node name="MenuButton" type="Button" parent="UI"]
+unique_name_in_owner = true
+process_mode = 3
+theme = ExtResource("2_theme")
+offset_left = 20.0
+offset_top = 70.0
+offset_right = 120.0
+offset_bottom = 110.0
+text = "ANA MENÜ"
+
+[node name="EndGameScreen" type="CenterContainer" parent="UI"]
+unique_name_in_owner = true
+theme = ExtResource("2_theme")
+visible = false
+anchors_preset = 12
+anchor_top = 0.3
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/EndGameScreen"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="WinnerText" type="Label" parent="UI/EndGameScreen/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 64
+text = "Kazanan:"
+horizontal_alignment = 1
+
+[node name="EndGameButtons" type="VBoxContainer" parent="UI/EndGameScreen/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 20
+
+[node name="ReplayButton" type="Button" parent="UI/EndGameScreen/VBoxContainer/EndGameButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "TEKRAR OYNA"
+
+[node name="EndMenuButton" type="Button" parent="UI/EndGameScreen/VBoxContainer/EndGameButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "ANA MENÜ"
+
+[node name="StatsButton" type="Button" parent="UI/EndGameScreen/VBoxContainer/EndGameButtons"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "İSTATİSTİKLER"
+
+[node name="StatsPanel" type="ColorRect" parent="UI"]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.95)
+theme = ExtResource("2_theme")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/StatsPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -250.0
+offset_right = 300.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="Title" type="Label" parent="UI/StatsPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "MAÇ İSTATİSTİKLERİ"
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="UI/StatsPanel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="StatsList" type="VBoxContainer" parent="UI/StatsPanel/VBoxContainer/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 15
+
+[node name="CloseStatsButton" type="Button" parent="UI/StatsPanel/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "KAPAT"
+
+[node name="GameManager" type="Node" parent="."]
+script = ExtResource("1_2n7xk")

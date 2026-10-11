@@ -1,0 +1,70 @@
+[gd_scene format=3 uid="uid://level2"]
+
+[ext_resource type="Script" path="res://scripts/Level.gd" id="1_lvl"]
+[ext_resource type="Texture2D" path="res://assets/sprites/level2_bg_hd.jpg" id="2_bg"]
+[ext_resource type="Texture2D" uid="uid://c3x" path="res://assets/sprites/obstacle_rock.png" id="3_rock"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall"]
+size = Vector2(100, 100)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_rock"]
+radius = 45.0
+
+[node name="Level2" type="Node2D"]
+script = ExtResource("1_lvl")
+spawn_area = Rect2(180, 200, 900, 430)
+
+[node name="BackgroundLayer" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="Background" type="TextureRect" parent="BackgroundLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_bg")
+expand_mode = 1
+stretch_mode = 0
+
+[node name="Walls" type="Node2D" parent="."]
+
+[node name="TopWall" type="StaticBody2D" parent="Walls"]
+position = Vector2(640, 130)
+scale = Vector2(10.0, 0.5)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/TopWall"]
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="BottomWall" type="StaticBody2D" parent="Walls"]
+position = Vector2(640, 680)
+scale = Vector2(10.0, 0.5)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/BottomWall"]
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="LeftWall" type="StaticBody2D" parent="Walls"]
+position = Vector2(140, 410)
+scale = Vector2(0.5, 5.0)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/LeftWall"]
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="RightWall" type="StaticBody2D" parent="Walls"]
+position = Vector2(1130, 410)
+scale = Vector2(0.5, 5.0)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/RightWall"]
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="Obstacle1" type="StaticBody2D" parent="Walls"]
+position = Vector2(350, 450)
+[node name="Sprite2D" type="Sprite2D" parent="Walls/Obstacle1"]
+scale = Vector2(0.12, 0.12)
+texture = ExtResource("3_rock")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Obstacle1"]
+shape = SubResource("CircleShape2D_rock")
+
+[node name="Obstacle2" type="StaticBody2D" parent="Walls"]
+position = Vector2(930, 450)
+[node name="Sprite2D" type="Sprite2D" parent="Walls/Obstacle2"]
+scale = Vector2(0.12, 0.12)
+texture = ExtResource("3_rock")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Obstacle2"]
+shape = SubResource("CircleShape2D_rock")

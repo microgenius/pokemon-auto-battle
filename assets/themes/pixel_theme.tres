@@ -1,0 +1,36 @@
+[gd_resource type="Theme" format=3 uid="uid://b46fjj2a3viu5"]
+
+[ext_resource type="FontFile" uid="uid://c5fgxevv6sdb6" path="res://assets/fonts/PressStart2P-Regular.ttf" id="1_qss3m"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xylp7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lrh3a"]
+bg_color = Color(0, 0, 0, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_11cef"]
+bg_color = Color(0, 0, 0, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rba4y"]
+bg_color = Color(0, 0, 0, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qn37a"]
+bg_color = Color(0, 0, 0, 0.8)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(1, 1, 1, 1)
+anti_aliasing = false
+
+[resource]
+default_font = ExtResource("1_qss3m")
+default_font_size = 16
+Button/colors/font_color = Color(1, 1, 1, 1)
+Button/colors/font_hover_color = Color(1, 0.84313726, 0, 1)
+Button/colors/font_pressed_color = Color(1, 0, 0, 1)
+Button/styles/focus = SubResource("StyleBoxEmpty_xylp7")
+Button/styles/hover = SubResource("StyleBoxFlat_lrh3a")
+Button/styles/normal = SubResource("StyleBoxFlat_11cef")
+Button/styles/pressed = SubResource("StyleBoxFlat_rba4y")
+Panel/styles/panel = SubResource("StyleBoxFlat_qn37a")
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_qn37a")
