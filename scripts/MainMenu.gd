@@ -32,7 +32,7 @@ func _ready() -> void:
 
 
 	# Arka planı Texture olarak yükle
-	var bg_tex = load("res://assets/sprites/level1_bg_hd.jpg")
+	var bg_tex = load("res://assets/sprites/menu_bg_hd.jpg")
 	if bg_tex:
 		var bg = TextureRect.new()
 		bg.texture = bg_tex
